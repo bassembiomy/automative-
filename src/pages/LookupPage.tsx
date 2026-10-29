@@ -28,7 +28,7 @@ export function LookupPage() {
       <div className="page-head">
         <div>
           <h1>Code lookup</h1>
-          <p>Works offline. {stats.total} explanations: {stats.generic} generic, {stats.korean} Korean, {stats.german} German, {stats.japanese} Japanese.</p>
+          <p>Works offline. {stats.total} explanations: {stats.generic} generic, {stats.korean} Korean, {stats.german} German, {stats.japanese} Japanese, {stats.chinese} Chinese.</p>
         </div>
       </div>
 
@@ -46,7 +46,7 @@ export function LookupPage() {
             <select id="make" className="select" value={make} onChange={(e) => setMake(e.target.value)}>
               <option value="All">All brands</option>
               <option value="Generic">Generic codes only</option>
-              {['Korean', 'German', 'Japanese'].map((r) => (
+              {['Korean', 'German', 'Japanese', 'Chinese'].map((r) => (
                 <optgroup key={r} label={r}>
                   {MAKES.filter((m) => m.region === r).map((m) => <option key={m.name} value={m.name}>{m.name}</option>)}
                 </optgroup>

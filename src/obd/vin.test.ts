@@ -24,6 +24,14 @@ describe('vin', () => {
     expect(info.region).toBe('Japanese');
     expect(info.year).toBe(2004);
   });
+  it('decodes Chinese VINs (SAIC MG 2021, MG Rover 2004, BYD 2023)', () => {
+    const mg = decodeVin('LSJW74U93MZ123456', 2026);
+    expect(mg.make).toBe('MG');
+    expect(mg.region).toBe('Chinese');
+    expect(mg.year).toBe(2021);
+    expect(decodeVin('SARRDZBHT4D123456', 2026).make).toBe('MG');
+    expect(decodeVin('LGXCE4CB0P0123456', 2026)).toMatchObject({ make: 'BYD', year: 2023 });
+  });
   it('prefers the longest WMI match (Lexus JTH over Toyota JT, Toyota 1NX over Nissan 1N)', () => {
     expect(decodeVin('JTHBK1GG5E2123456').make).toBe('Lexus');
     expect(decodeVin('1NXBR32E34Z123456').make).toBe('Toyota');

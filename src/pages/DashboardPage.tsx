@@ -28,7 +28,7 @@ export function DashboardPage() {
         <div className="card hero stack" style={{ padding: 28 }}>
           <h1 style={{ fontSize: 28 }}>Read, understand and clear your car&apos;s trouble codes</h1>
           <p className="muted" style={{ maxWidth: 680 }}>
-            AutoScan talks to a USB ELM327 adapter through your browser (Chrome or Edge). It explains every code in plain language, works for 2002+ Korean, German and Japanese cars and keeps a local history.
+            AutoScan talks to a USB ELM327 adapter through your browser (Chrome or Edge). It explains every code in plain language, works for 2002+ Korean, German, Japanese and Chinese cars (including MG) and keeps a local history.
           </p>
           <div className="actions">
             <Button variant="primary" onClick={() => navigate('/connect')} icon={<Plug size={16} />} disabled={status === 'connecting'}>Connect an adapter</Button>

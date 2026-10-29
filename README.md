@@ -1,6 +1,6 @@
 # AutoScan OBD2
 
-A React + TypeScript web app that reads, explains and clears car trouble codes (DTCs) through a **USB ELM327 adapter**, straight from the browser using the **Web Serial API**. Built for **2002+ Korean, German and Japanese cars**, covering all code sections (**P** powertrain, **C** chassis, **B** body, **U** network). A built-in **Simulator** lets you try everything without a car or an adapter.
+A React + TypeScript web app that reads, explains and clears car trouble codes (DTCs) through a **USB ELM327 adapter**, straight from the browser using the **Web Serial API**. Built for **2002+ Korean, German, Japanese and Chinese cars (including MG)**, covering all code sections (**P** powertrain, **C** chassis, **B** body, **U** network). A built-in **Simulator** lets you try everything without a car or an adapter.
 
 ## Features
 
@@ -13,7 +13,7 @@ A React + TypeScript web app that reads, explains and clears car trouble codes (
 - **VIN read and offline VIN decode** to make and model year (with check-digit validation).
 - **Offline code lookup** - search by code or keyword, filter by system and brand. Unknown codes still get a meaningful explanation built from the code structure.
 - **History** - every scan is saved in your browser only; export JSON or print a report.
-- **Simulator** with six preset vehicles and protocol-correct framing (CAN ISO-TP multi-frame, K-line headers with checksums), so the real parser is exercised.
+- **Simulator** with seven preset vehicles and protocol-correct framing (CAN ISO-TP multi-frame, K-line headers with checksums), so the real parser is exercised.
 - Dark "instrument cluster" theme plus a light theme, responsive layout (sidebar on desktop, bottom tab bar under 768 px), keyboard accessible, optional raw ELM327 console for advanced users.
 
 ## Offline code database
@@ -24,6 +24,7 @@ A React + TypeScript web app that reads, explains and clears car trouble codes (
 | Korean (Hyundai, Kia, Genesis) | 38 | Manufacturer codes plus brand-specific guidance on standard codes |
 | German (VW group, BMW/Mini, Mercedes-Benz, Opel) | 43 | VAG P1xxx codes, BMW DME codes, brand notes |
 | Japanese (Toyota/Lexus, Honda/Acura, Nissan/Infiniti, Mazda, Subaru, Mitsubishi, Suzuki) | 61 | Manufacturer-defined P1xxx codes plus brand notes |
+| Chinese (MG, Chery, Geely, BYD, Great Wall / Haval, Changan, JAC) | 38 | Brand guidance on standard codes, grouped by engine family (turbo petrol, diesel, hybrid). Chinese manufacturer-defined codes are not included because they are not reliably documented outside dealer tools |
 
 Manufacturer-specific meanings differ by brand, model and year. Treat them as guidance and confirm against the service information for your exact vehicle.
 
@@ -31,7 +32,7 @@ Manufacturer-specific meanings differ by brand, model and year. Treat them as gu
 
 - **Adapters**: any USB ELM327-compatible adapter - OBDLink SX/EX, vLinker FS, genuine ELM327, and FTDI / CH340 based clones. Bluetooth and Wi-Fi adapters are not supported (the transport interface leaves room for Web Bluetooth later).
 - **Protocols**: ISO 9141-2, ISO 14230-4 (KWP 5-baud/fast), SAE J1850 PWM/VPW, ISO 15765-4 CAN 11/29-bit at 250/500 kbaud.
-- **Brands**: Hyundai, Kia, Genesis; Volkswagen, Audi, Skoda, Seat, Porsche, BMW, Mini, Mercedes-Benz, Opel; Toyota, Lexus, Honda, Acura, Nissan, Infiniti, Mazda, Subaru, Mitsubishi, Suzuki. Other makes work for generic OBD2 codes.
+- **Brands**: Hyundai, Kia, Genesis; Volkswagen, Audi, Skoda, Seat, Porsche, BMW, Mini, Mercedes-Benz, Opel; Toyota, Lexus, Honda, Acura, Nissan, Infiniti, Mazda, Subaru, Mitsubishi, Suzuki; MG (SAIC and 2002–2005 MG Rover), Chery, Geely, BYD, Great Wall / Haval, Changan, JAC. Other makes work for generic OBD2 codes.
 - **Browsers**: Chrome or Edge on desktop (Web Serial). Firefox and Safari have no Web Serial support - the Simulator and Code Lookup still work there.
 
 ## Run it

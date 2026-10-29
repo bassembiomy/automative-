@@ -74,7 +74,7 @@ export function SettingsPage() {
       <Card>
         <h2 className="row" style={{ gap: 8 }}><Info size={18} aria-hidden /> About</h2>
         <p>AutoScan OBD2 reads and explains diagnostic trouble codes through a USB ELM327 adapter using the Web Serial API (Chrome or Edge on desktop).</p>
-        <p className="muted" style={{ marginTop: 6 }}>Offline code database: {stats.total} entries ({stats.generic} generic, {stats.korean} Korean, {stats.german} German, {stats.japanese} Japanese). Scan history and settings are stored only in this browser.</p>
+        <p className="muted" style={{ marginTop: 6 }}>Offline code database: {stats.total} entries ({stats.generic} generic, {stats.korean} Korean, {stats.german} German, {stats.japanese} Japanese, {stats.chinese} Chinese). Scan history and settings are stored only in this browser.</p>
         <div style={{ marginTop: 12 }}>
           <Notice>This project is independent and is not affiliated with or endorsed by any vehicle manufacturer.</Notice>
         </div>

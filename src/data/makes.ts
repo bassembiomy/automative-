@@ -1,4 +1,4 @@
-export type Region = 'Korean' | 'German' | 'Japanese';
+export type Region = 'Korean' | 'German' | 'Japanese' | 'Chinese';
 
 export interface MakeInfo {
   name: string;
@@ -30,9 +30,17 @@ export const MAKES: MakeInfo[] = [
   { name: 'Subaru', region: 'Japanese', wmi: ['JF1', 'JF2', '4S3', '4S4'] },
   { name: 'Mitsubishi', region: 'Japanese', wmi: ['JA3', 'JA4', 'ML3', 'JA'] },
   { name: 'Suzuki', region: 'Japanese', wmi: ['JS', 'TSM'] },
+  // MG: SAIC-built cars (LSJ) and 2002-2005 MG Rover cars built in the UK (SAR).
+  { name: 'MG', region: 'Chinese', wmi: ['LSJ', 'SAR'] },
+  { name: 'Chery', region: 'Chinese', wmi: ['LVV'] },
+  { name: 'Geely', region: 'Chinese', wmi: ['L6T', 'LB3'] },
+  { name: 'BYD', region: 'Chinese', wmi: ['LGX', 'LC0'] },
+  { name: 'Great Wall / Haval', region: 'Chinese', wmi: ['LGW'] },
+  { name: 'Changan', region: 'Chinese', wmi: ['LS5'] },
+  { name: 'JAC', region: 'Chinese', wmi: ['LJ1'] },
 ];
 
-export const REGIONS: Region[] = ['Korean', 'German', 'Japanese'];
+export const REGIONS: Region[] = ['Korean', 'German', 'Japanese', 'Chinese'];
 
 export const makesByRegion = (r: Region): MakeInfo[] => MAKES.filter((m) => m.region === r);
 export const findMake = (name: string): MakeInfo | undefined => MAKES.find((m) => m.name.toLowerCase() === name.toLowerCase());

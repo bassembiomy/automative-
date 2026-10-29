@@ -1,7 +1,7 @@
 # AutoScan OBD2 — Design & Implementation Plan
 
 A React web app for reading, explaining and clearing diagnostic trouble codes (DTCs)
-on 2002+ vehicles (focus: Korean, German, Japanese brands) through a USB
+on 2002+ vehicles (focus: Korean, German, Japanese and Chinese brands, including MG) through a USB
 ELM327-compatible OBD2 adapter.
 
 ---
@@ -19,7 +19,7 @@ ELM327-compatible OBD2 adapter.
 - Read MIL (check-engine light) status and DTC count (Mode 01 PID 01).
 - Read **freeze frame** (Mode 02) for the code that triggered the MIL.
 - **Clear DTCs** (Mode 04) behind a safety confirmation dialog.
-- **Explain each code**: title, system section, severity, symptoms, likely causes, suggested fixes. Generic SAE codes plus manufacturer-specific codes for Korean, German and Japanese brands.
+- **Explain each code**: title, system section, severity, symptoms, likely causes, suggested fixes. Generic SAE codes plus manufacturer-specific codes for Korean, German, Japanese and Chinese brands.
 - Cover **all sections**: P (Powertrain), C (Chassis), B (Body), U (Network).
 - **Module scan** on CAN cars: query every ECU that answers on the bus (engine, transmission, ABS, airbag, body…) with UDS `19 02` and clear with UDS `14 FF FF FF`.
 - Live data (Mode 01 PIDs) with gauges.
@@ -74,6 +74,7 @@ src/
       korean.ts             Hyundai / Kia / Genesis specific
       german.ts             VW / Audi / Skoda / Seat / Porsche / BMW / Mini / Mercedes / Opel
       japanese.ts           Toyota / Lexus / Honda / Acura / Nissan / Infiniti / Mazda / Subaru / Mitsubishi / Suzuki
+      chinese.ts            MG / Chery / Geely / BYD / Great Wall-Haval / Changan / JAC (brand notes on SAE codes)
       index.ts              lookup(code, make?) → DtcInfo | fallback built from code structure
     makes.ts                makes grouped by region, with WMI prefixes
   state/
@@ -187,7 +188,7 @@ At minimum: 04 load, 05 coolant temp, 06–09 fuel trims, 0B MAP, 0C RPM, 0D spe
 **Layout**
 - Left sidebar (collapses into a bottom tab bar under 768px): Dashboard, Trouble Codes, Modules, Live Data, Code Lookup, History, Settings.
 - Top bar: connection pill (Disconnected / Connecting… / Connected · protocol · 12.4 V), vehicle name, Connect/Disconnect button.
-- The Connect screen is a 3-step stepper: **1. Adapter** (USB / Simulator, with a browser-support check) → **2. Vehicle** (region tabs Korean / German / Japanese, then make and year 2002–current, or "Auto-detect from VIN") → **3. Connect** (live checklist: open port ✓, reset adapter ✓, detect protocol ✓, read VIN ✓).
+- The Connect screen is a 3-step stepper: **1. Adapter** (USB / Simulator, with a browser-support check) → **2. Vehicle** (region tabs Korean / German / Japanese / Chinese, then make and year 2002–current, or "Auto-detect from VIN") → **3. Connect** (live checklist: open port ✓, reset adapter ✓, detect protocol ✓, read VIN ✓).
 - Code cards: big monospace code, title, section badge, severity pill, ECU source, and an expandable "Why / Symptoms / Causes / Fixes / Can I drive?" area.
 - Clear-codes dialog: lists the preconditions (ignition ON, engine OFF, the fault is repaired, the readiness monitors will reset and the car may fail inspection until a drive cycle completes). The user must tick a checkbox before the red "Clear codes" button becomes active.
 - A raw ELM console panel (toggle in Settings) for advanced users.

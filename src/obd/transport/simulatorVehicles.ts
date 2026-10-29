@@ -145,6 +145,20 @@ export const SIM_VEHICLES: SimVehicle[] = [
     supportedPids: BASE_PIDS, mil: true, pad: 0x00, ltft: 5.5,
     note: 'Honda-specific EVAP code P1456 with a lean bank 1 and pending small EVAP leak.',
   },
+  {
+    id: 'mgzs-2021',
+    label: '2021 MG ZS 1.0T (CAN)',
+    make: 'MG', model: 'ZS', year: 2021, protocol: '6',
+    vin: withCheck('LSJW74U90MZ123456'),
+    obdEcus: ['7E8'],
+    stored: [{ code: 'P0299' }, { code: 'P0302' }],
+    pending: [{ code: 'P0171' }],
+    permanent: [{ code: 'P0299' }],
+    freeze: { dtc: 'P0299', values: { 0x04: 71.5, 0x05: 91, 0x06: 3.1, 0x07: 7.0, 0x0b: 118, 0x0c: 3250, 0x0d: 84, 0x0f: 38, 0x11: 64.3 } },
+    modules: [],
+    supportedPids: BASE_PIDS, mil: true, pad: 0x00, ltft: 7.0,
+    note: 'Turbo underboost with a cylinder 2 misfire and a pending lean code (intake leak after the turbo).',
+  },
 ];
 
 export const findSimVehicle = (id: string): SimVehicle => SIM_VEHICLES.find((v) => v.id === id) ?? SIM_VEHICLES[0];

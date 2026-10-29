@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { allEntries, buildFallback, find, findAll, generic, german, japanese, korean, lookup, search, stats } from './index';
+import { allEntries, buildFallback, find, findAll, chinese, generic, german, japanese, korean, lookup, search, stats } from './index';
 import { genericChassis, genericEngine, genericTrans } from './generic';
 
-const files = { genericEngine, genericTrans, genericChassis, korean, german, japanese };
+const files = { genericEngine, genericTrans, genericChassis, korean, german, japanese, chinese };
 
 describe('DTC database', () => {
   it('has a substantial generic set and manufacturer sets', () => {
     expect(generic.length).toBeGreaterThanOrEqual(300);
-    for (const list of [korean, german, japanese]) {
+    for (const list of [korean, german, japanese, chinese]) {
       expect(list.length).toBeGreaterThanOrEqual(30);
       expect(list.length).toBeLessThanOrEqual(75);
     }
@@ -41,7 +41,7 @@ describe('DTC database', () => {
         expect(e.canDrive.length).toBeGreaterThan(5);
         expect(['low', 'medium', 'high', 'critical']).toContain(e.severity);
         expect(e.system.length).toBeGreaterThan(0);
-        if (name === 'korean' || name === 'german' || name === 'japanese') expect(e.makes?.length, e.code).toBeGreaterThan(0);
+        if (name === 'korean' || name === 'german' || name === 'japanese' || name === 'chinese') expect(e.makes?.length, e.code).toBeGreaterThan(0);
         else expect(e.makes).toBeUndefined();
       }
     });
@@ -66,6 +66,10 @@ describe('DTC database', () => {
       expect(lookup('P1326', 'Kia').title).toMatch(/Knock/);
       expect(lookup('P1456', 'Honda').title).toMatch(/EVAP/);
       expect(lookup('P1349', 'Toyota').title).toMatch(/VVT/);
+      expect(lookup('P0299', 'MG').makes).toContain('MG');
+      expect(lookup('P0A80', 'BYD').makes).toContain('BYD');
+      expect(lookup('P0087', 'JAC').description).toMatch(/diesel/);
+      expect(lookup('P0087', 'BYD').makes).toBeUndefined(); // diesel note is not applied to BYD
     });
     it('falls back to the generic entry when the make has no specific one', () => {
       const e = lookup('P0420', 'Suzuki');

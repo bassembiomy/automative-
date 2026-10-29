@@ -3,12 +3,13 @@ import { generic } from './generic';
 import { korean } from './korean';
 import { german } from './german';
 import { japanese } from './japanese';
+import { chinese } from './chinese';
 import type { DtcInfo, Section, Severity } from './types';
 
 export type { DtcInfo, Section, Severity } from './types';
-export { generic, korean, german, japanese };
+export { generic, korean, german, japanese, chinese };
 
-export const manufacturerEntries: DtcInfo[] = [...korean, ...german, ...japanese];
+export const manufacturerEntries: DtcInfo[] = [...korean, ...german, ...japanese, ...chinese];
 export const allEntries: DtcInfo[] = [...generic, ...manufacturerEntries];
 
 const byCode = new Map<string, DtcInfo[]>();
@@ -150,5 +151,6 @@ export const stats = {
   korean: korean.length,
   german: german.length,
   japanese: japanese.length,
+  chinese: chinese.length,
   total: allEntries.length,
 };
