@@ -204,4 +204,36 @@ describe('ELM327 error mapping', () => {
     expect(b).toEqual(['OK']);
     expect(c[0]).toMatch(/V$/);
   });
+
+  it('discards a late reply after a timeout instead of returning it for the next command', async () => {
+    const cbs = new Set<(c: string) => void>();
+    const emit = (c: string) => cbs.forEach((cb) => cb(c));
+    let calls = 0;
+    let late: ReturnType<typeof setTimeout> | undefined;
+    const slow: Transport = {
+      kind: 'simulator',
+      isOpen: true,
+      open: async () => {},
+      close: async () => {},
+      onData: (cb) => {
+        cbs.add(cb);
+        return () => cbs.delete(cb);
+      },
+      write: async (data) => {
+        calls++;
+        if (calls === 1) {
+          late = setTimeout(() => emit('7E8 03 41 0D 20\r\r>'), 60); // slow reply to 010D
+        } else if (data === '\r') {
+          // A real ELM327 aborts the running command on any input and prints its prompt.
+          clearTimeout(late);
+          setTimeout(() => emit('STOPPED\r\r>'), 0);
+        } else {
+          setTimeout(() => emit('7E8 04 41 0C 1A F8\r\r>'), 100);
+        }
+      },
+    };
+    const elm = new Elm327(slow, { defaultTimeoutMs: 30 });
+    await expect(elm.send('010D')).rejects.toMatchObject({ kind: 'TIMEOUT' });
+    await expect(elm.send('010C', 500)).resolves.toEqual(['7E8 04 41 0C 1A F8']);
+  });
 });

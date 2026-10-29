@@ -212,7 +212,8 @@ export class DiagnosticService {
         try {
           await this.selectModule(module);
           const res = await this.elm.request(UDS_READ_DTC_REQUEST, 2500);
-          const reply = res.find((r) => r.data[0] === 0x59 || r.data[0] === 0x7f);
+          // Prefer the positive reply: an ECU may first send 7F 19 78 (response pending).
+          const reply = res.find((r) => r.data[0] === 0x59) ?? res.find((r) => r.data[0] === 0x7f && r.data[2] !== 0x78);
           if (!reply) {
             results.push({ module, status: 'no-response', dtcs: [] });
             continue;
@@ -242,7 +243,7 @@ export class DiagnosticService {
     try {
       await this.selectModule(module);
       const res = await this.elm.request(UDS_CLEAR_DTC_REQUEST, 5000);
-      const reply = res.find((r) => r.data[0] === 0x54 || r.data[0] === 0x7f);
+      const reply = res.find((r) => r.data[0] === 0x54) ?? res.find((r) => r.data[0] === 0x7f && r.data[2] !== 0x78);
       return reply ? parseUdsClear(reply.data) : { ok: false, reason: 'No response' };
     } catch (e) {
       return { ok: false, reason: e instanceof Error ? e.message : 'Failed' };

@@ -82,6 +82,8 @@ export class Elm327 {
   private readonly log: LogFn;
   private readonly resetDelayMs: number;
   headers = true;
+  /** Set after a timeout: the adapter may still send a late reply and prompt that must not leak into the next command. */
+  private stale = false;
 
   constructor(readonly transport: Transport, opts: Elm327Options = {}) {
     this.timeoutMs = opts.defaultTimeoutMs ?? 3000;
@@ -91,7 +93,10 @@ export class Elm327 {
 
   /** Send a command and return cleaned reply lines. Throws ElmError for adapter error tokens or timeouts. */
   send(command: string, timeoutMs?: number): Promise<string[]> {
-    const run = () => this.exec(command, timeoutMs ?? this.timeoutMs);
+    const run = async () => {
+      if (this.stale) await this.drain();
+      return this.exec(command, timeoutMs ?? this.timeoutMs);
+    };
     const p = this.queue.then(run, run);
     this.queue = p.catch(() => undefined);
     return p;
@@ -105,6 +110,24 @@ export class Elm327 {
       if (e instanceof ElmError && e.kind !== 'TIMEOUT' && e.kind !== 'NOT_OPEN') return { lines: [], error: e };
       throw e;
     }
+  }
+
+  /** Interrupt any command still running on the adapter and discard output up to its prompt. */
+  private drain(): Promise<void> {
+    this.stale = false;
+    return new Promise<void>((resolve) => {
+      const unsubscribe = this.transport.onData((chunk) => {
+        if (chunk.includes('>')) finish();
+      });
+      const timer = setTimeout(() => finish(), 1000);
+      function finish() {
+        clearTimeout(timer);
+        unsubscribe();
+        resolve();
+      }
+      // Any character stops a running ELM327 command, which then prints its prompt.
+      this.transport.write('\r').catch(() => finish());
+    });
   }
 
   private exec(command: string, timeoutMs: number): Promise<string[]> {
@@ -124,6 +147,7 @@ export class Elm327 {
       };
       const timer = setTimeout(() => {
         this.log('error', `timeout waiting for reply to ${command}`);
+        this.stale = true;
         finish(() => reject(new ElmError('TIMEOUT', command, `No reply from adapter to ${command}`)));
       }, timeoutMs);
       const unsubscribe = this.transport.onData((chunk) => {

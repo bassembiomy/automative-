@@ -82,7 +82,7 @@ export function LiveDataPage() {
             const range = def.pid === 0x0c ? { min: 0, max: 7000 } : def.pid === 0x0d ? { min: 0, max: settings.imperial ? 150 : 240 } : { min: Math.min(lo, hi), max: Math.max(lo, hi) };
             return (
               <Card key={pid}>
-                <Gauge label={def.name} value={conv?.value} min={Math.round(range.min)} max={Math.round(range.max)} unit={conv?.unit ?? def.unit} decimals={def.scale < 1 ? 1 : 0} />
+                <Gauge label={def.name} value={conv?.value} min={Math.round(range.min)} max={Math.round(range.max)} unit={conv?.unit ?? def.unit} decimals={def.scale < 1 && def.max - def.min <= 1000 ? 1 : 0} />
                 <Sparkline data={(live.series[pid] ?? []).map((v) => toDisplayUnit(v, def.unit, settings.imperial).value)} />
               </Card>
             );
